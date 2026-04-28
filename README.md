@@ -12,7 +12,7 @@ An expert AI-powered assistant designed to help Indian citizens understand the e
 ## Tech Stack
 - **Frontend**: Next.js 14, TypeScript, Tailwind CSS, Framer Motion, Lucide React.
 - **Backend**: FastAPI (Python), Google Gemini 1.5 Pro.
-
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Chunav-Sathi-app-blue)](https://election-guide-frontend-461702816191.asia-south1.run.app)
 ## Setup Instructions
 
 ### Backend Setup
