@@ -1,0 +1,90 @@
+export type Language = 'en' | 'hi';
+
+export const translations = {
+  en: {
+    appName: "Chunav Saathi",
+    tagline: "Your Election Guide",
+    taglineDevanagari: "चुनाव साथी · Your Election Guide",
+    askPlaceholder: "Ask about elections...",
+    askPlaceholderHi: "(चुनाव के बारे में पूछें...)",
+    namaste: "Namaste! 🙏",
+    intro: "I am Chunav Saathi. Ask me anything about Indian Elections.",
+    starterPrompts: [
+      "What is the election process in India? 🇮🇳",
+      "How to register as a voter? (Form 6)",
+      "What are EVM and VVPAT?"
+    ],
+    timelineTitle: "Election Timeline",
+    topicsTitle: "Important Topics",
+    close: "Close",
+    syncActive: "Cloud Sync Active",
+    localMode: "Local Session Mode",
+    session: "Session",
+    steps: [
+      { id: 1, label: 'Election Announcement', description: 'ECI issues schedule', query: 'Tell me about the election announcement and ECI schedule.' },
+      { id: 2, label: 'Voter Registration', description: 'Form 6, EPIC card', query: 'What is the process for voter registration and Form 6?' },
+      { id: 3, label: 'Nomination Filing', description: 'Candidates file papers', query: 'Explain the nomination process and the role of the Returning Officer.' },
+      { id: 4, label: 'Scrutiny & Withdrawal', description: 'Papers checked', query: 'What is the process for scrutiny of nomination papers and withdrawal?' },
+      { id: 5, label: 'Election Campaign', description: 'Model Code begins', query: 'Tell me about election campaigning and the Model Code of Conduct rules.' },
+      { id: 6, label: 'Polling Day', description: 'EVM voting, VVPAT', query: 'What happens on polling day? Provide info on EVM and VVPAT.' },
+      { id: 7, label: 'Counting & Results', description: 'Winner declared', query: 'How are votes counted and results declared?' },
+    ],
+    topics: [
+      { id: 1, title: '🗳️ How to Vote on Polling Day', query: 'How to cast a vote on polling day in India?' },
+      { id: 2, title: '📋 Voter Registration (Form 6)', query: 'How to fill the voter registration Form 6?' },
+      { id: 3, title: '🪪 Voter ID / EPIC Card', query: 'How to apply for a Voter ID card or EPIC card?' },
+      { id: 4, title: '🏛️ Lok Sabha vs Rajya Sabha', query: 'What is the difference between Lok Sabha and Rajya Sabha?' },
+      { id: 5, title: '⚖️ Model Code of Conduct', query: 'What is the Model Code of Conduct?' },
+      { id: 6, title: '📱 EVM & VVPAT Explained', query: 'How do EVM and VVPAT work?' },
+      { id: 7, title: '🙅 What is NOTA?', query: 'What is NOTA and what is its significance?' },
+      { id: 8, title: '👤 How to File Nomination', query: 'How do candidates file their nomination?' },
+      { id: 9, title: '📅 Election Phases in India', query: 'What are the different phases of election in India?' },
+      { id: 10, title: '🏢 Role of Election Commission', query: 'What is the role of the Election Commission of India (ECI)?' },
+      { id: 11, title: '📊 How Votes Are Counted', query: 'How is the counting of votes done?' },
+      { id: 12, title: '🎯 Reserved Constituencies', query: 'What are Reserved Constituencies (SC/ST)?' },
+    ]
+  },
+  hi: {
+    appName: "चुनाव साथी",
+    tagline: "आपका चुनाव मार्गदर्शक",
+    taglineDevanagari: "चुनाव साथी · आपका चुनाव मार्गदर्शक",
+    askPlaceholder: "चुनाव के बारे में पूछें...",
+    askPlaceholderHi: "",
+    namaste: "नमस्ते! 🙏",
+    intro: "मैं हूँ चुनाव साथी। मुझसे भारतीय चुनावों के बारे में कुछ भी पूछें।",
+    starterPrompts: [
+      "भारत में चुनाव की प्रक्रिया क्या है? 🇮🇳",
+      "मतदाता पंजीकरण कैसे करें? (फॉर्म 6)",
+      "EVM और VVPAT क्या होता है?"
+    ],
+    timelineTitle: "चुनाव की समयरेखा",
+    topicsTitle: "महत्वपूर्ण विषय",
+    close: "बंद करें",
+    syncActive: "क्लाउड सिंक सक्रिय",
+    localMode: "लोकल सेशन मोड",
+    session: "सत्र",
+    steps: [
+      { id: 1, label: 'चुनाव की घोषणा', description: 'ECI शेड्यूल जारी करता है', query: 'चुनाव की घोषणा और ईसीआई के शेड्यूल के बारे में बताएं।' },
+      { id: 2, label: 'मतदाता पंजीकरण', description: 'फॉर्म 6, EPIC कार्ड', query: 'मतदाता पंजीकरण और फॉर्म 6 की प्रक्रिया क्या है?' },
+      { id: 3, label: 'नामांकन दाखिल करना', description: 'उम्मीदवार पर्चे भरते हैं', query: 'नामांकन प्रक्रिया और रिटर्निंग ऑफिसर की क्या भूमिका है?' },
+      { id: 4, label: 'जांच और वापसी', description: 'पर्चों की जांच', query: 'नामांकन पत्रों की जांच और नाम वापसी की प्रक्रिया क्या है?' },
+      { id: 5, label: 'चुनाव प्रचार', description: 'आचार संहिता शुरू', query: 'चुनाव प्रचार और आचार संहिता के नियमों के बारे में बताएं।' },
+      { id: 6, label: 'मतदान का दिन', description: 'EVM वोटिंग, VVPAT', query: 'मतदान के दिन क्या होता है? ईवीएम और वीवीपैट की जानकारी दें।' },
+      { id: 7, label: 'मतगणना और परिणाम', description: 'विजेता घोषित', query: 'वोटों की गिनती और नतीजों की घोषणा कैसे होती है?' },
+    ],
+    topics: [
+      { id: 1, title: '🗳️ मतदान के दिन वोट कैसे डालें', query: 'भारत में मतदान के दिन वोट कैसे डालें?' },
+      { id: 2, title: '📋 मतदाता पंजीकरण (फॉर्म 6)', query: 'वोटर रजिस्ट्रेशन (फॉर्म 6) कैसे भरें?' },
+      { id: 3, title: '🪪 वोटर आईडी / EPIC कार्ड', query: 'वोटर आईडी कार्ड या EPIC कार्ड के लिए आवेदन कैसे करें?' },
+      { id: 4, title: '🏛️ लोकसभा बनाम राज्यसभा', query: 'लोकसभा और राज्यसभा में क्या अंतर है?' },
+      { id: 5, title: '⚖️ आदर्श आचार संहिता', query: 'चुनाव आचार संहिता (Model Code of Conduct) क्या होती है?' },
+      { id: 6, title: '📱 EVM और VVPAT की जानकारी', query: 'ईवीएम (EVM) और वीवीपैट (VVPAT) कैसे काम करते हैं?' },
+      { id: 7, title: '🙅 नोटा (NOTA) क्या है?', query: 'नोटा (NOTA) क्या है और इसका क्या महत्व है?' },
+      { id: 8, title: '👤 नामांकन कैसे भरें', query: 'उम्मीदवार अपना नामांकन (nomination) कैसे दाखिल करते हैं?' },
+      { id: 9, title: '📅 भारत में चुनाव चरण', query: 'भारत में चुनाव के विभिन्न चरण (phases) क्या होते हैं?' },
+      { id: 10, title: '🏢 चुनाव आयोग की भूमिका', query: 'भारत निर्वाचन आयोग (ECI) की क्या भूमिका है?' },
+      { id: 11, title: '📊 वोटों की गिनती कैसे होती है', query: 'मतगणना (counting) कैसे की जाती है?' },
+      { id: 12, title: '🎯 आरक्षित निर्वाचन क्षेत्र', query: 'आरक्षित निर्वाचन क्षेत्रों (Reserved Constituencies) का क्या मतलब है?' },
+    ]
+  }
+};

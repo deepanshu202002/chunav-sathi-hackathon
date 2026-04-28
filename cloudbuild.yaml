@@ -1,0 +1,66 @@
+steps:
+  # 1. Build Backend
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'asia-south1-docker.pkg.dev/$PROJECT_ID/election-guide-repo/backend:latest', './backend']
+
+  # 2. Push Backend
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'asia-south1-docker.pkg.dev/$PROJECT_ID/election-guide-repo/backend:latest']
+
+  # 3. Deploy Backend
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'election-guide-backend'
+      - '--image'
+      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/election-guide-repo/backend:latest'
+      - '--region'
+      - 'asia-south1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--set-env-vars'
+      - 'GOOGLE_API_KEY=${_GOOGLE_API_KEY},DATABASE_URL=${_DATABASE_URL}'
+
+  # 4. Build Frontend
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_BACKEND_URL=${_NEXT_PUBLIC_BACKEND_URL}'
+      - '-t'
+      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/election-guide-repo/frontend:latest'
+      - './frontend'
+
+  # 5. Push Frontend
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'asia-south1-docker.pkg.dev/$PROJECT_ID/election-guide-repo/frontend:latest']
+
+  # 6. Deploy Frontend
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'election-guide-frontend'
+      - '--image'
+      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/election-guide-repo/frontend:latest'
+      - '--region'
+      - 'asia-south1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+
+images:
+  - 'asia-south1-docker.pkg.dev/$PROJECT_ID/election-guide-repo/backend:latest'
+  - 'asia-south1-docker.pkg.dev/$PROJECT_ID/election-guide-repo/frontend:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _GOOGLE_API_KEY: ""
+  _DATABASE_URL: ""
+  _NEXT_PUBLIC_BACKEND_URL: ""

@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+@theme {
+  /* Heritage Obsidian Theme */
+  --color-bg-primary: #050505;
+  --color-bg-surface: #0f0f0f;
+  --color-bg-card: #161616;
+  --color-accent-saffron: #FF9933;
+  --color-accent-green: #138808;
+  --color-accent-gold: #D4AF37;
+  --color-text-primary: #ffffff;
+  --color-text-muted: #888888;
+  --color-border: #222222;
+
+  --font-sans: var(--font-inter), var(--font-outfit), ui-sans-serif, system-ui;
+}
+
+:root {
+  --bg-primary: #050505;
+  --bg-surface: #0f0f0f;
+  --bg-card: #161616;
+  --accent-saffron: #FF9933;
+  --accent-green: #138808;
+  --accent-gold: #D4AF37;
+  --text-primary: #ffffff;
+  --text-muted: #888888;
+  --border: #222222;
+}
+
+html, body {
+  background-color: #050505 !important;
+  color: #ffffff;
+  padding-bottom: env(safe-area-inset-bottom);
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.02;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-gold);
+  }
+}
+
+/* Ashoka Chakra Animation */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 40s linear infinite;
+}
+
+/* Mobile optimizations */
+@media (max-width: 1024px) {
+  .chat-container {
+    height: calc(100dvh - 56px - 80px);
+  }
+}
+
+/* Custom styles for chat bubbles */
+.user-bubble {
+  background: linear-gradient(135deg, var(--accent-saffron), #e67e22);
+  box-shadow: 0 4px 15px rgba(230, 126, 34, 0.15);
+}
+
+.bot-bubble {
+  background: var(--bg-card);
+  border-left: 3px solid var(--accent-gold);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Premium Button Glow */
+.premium-glow {
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
+  transition: all 0.3s ease;
+}
+.premium-glow:hover {
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
+}

@@ -1,0 +1,13 @@
+node_modules/
+.next/
+.git/
+.gitignore
+.env
+backend/__pycache__/
+backend/venv/
+backend/.env
+backend/test_key.py
+frontend/node_modules/
+frontend/.next/
+frontend/.env
+frontend/cloudbuild.yaml
