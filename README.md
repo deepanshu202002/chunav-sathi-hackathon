@@ -3,7 +3,7 @@
 An expert AI-powered assistant designed to help Indian citizens understand the election process, from voter registration to result declaration.
 
 ## Features
-- **Real-time Streaming**: Instant responses via SSE from Gemini 1.5 Pro.
+- **Real-time Streaming**: Instant responses via SSE from Gemini 2.5 Flash.
 - **Interactive Timeline**: Step-by-step guide to the Indian election cycle.
 - **Topic Library**: Quick access to essential election topics (EVM, NOTA, Form 6, etc.).
 - **Tricolor Theme**: Premium dark UI inspired by the Indian National Flag.
