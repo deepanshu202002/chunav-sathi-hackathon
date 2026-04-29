@@ -67,6 +67,10 @@ async def add_security_headers(request: Request, call_next):
 async def root():
     return {"message": "Chunav Saathi API is running"}
 
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy", "service": "Chunav Saathi API"}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

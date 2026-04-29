@@ -12,6 +12,14 @@ from sqlalchemy import select
 
 router = APIRouter()
 
+def sanitize_input(text: str) -> str:
+    import re
+    text = text.strip()[:2000]
+    text = re.sub(r'<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'javascript:', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'on\w+\s*=', '', text, flags=re.IGNORECASE)
+    return text
+
 class Message(BaseModel):
     role: str
     content: str

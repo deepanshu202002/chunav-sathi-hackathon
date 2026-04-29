@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, User, Bot, ArrowRight, Database } from 'lucide-react';
+import { Send, User, Bot, ArrowRight } from 'lucide-react';
 import { Message, streamChat } from '@/lib/api';
 import TypingIndicator from './TypingIndicator';
 import { cn } from '@/lib/utils';
@@ -18,39 +18,30 @@ export default function ChatBox({ initialMessage, lang = 'en' }: ChatBoxProps) {
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingText, setStreamingText] = useState('');
   const [sessionId, setSessionId] = useState('');
+  const lastInitialMessage = useRef<string | undefined>(undefined);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const sanitizeInput = (text: string): string => {
+  const sanitizeInput = useCallback((text: string): string => {
     return text
       .trim()
       .slice(0, 2000)
       .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
       .replace(/javascript:/gi, '')
       .replace(/on\w+\s*=/gi, '')
-  }
-
-  useEffect(() => {
-    setSessionId(`session_${Math.random().toString(36).slice(2, 9)}`);
   }, []);
 
-  useEffect(() => {
-    if (initialMessage) {
-      handleSend(initialMessage);
-    }
-  }, [initialMessage]);
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [messages, streamingText]);
-
-  const handleSend = async (content: string) => {
+  const handleSend = useCallback(async (content: string) => {
     const sanitized = sanitizeInput(content);
     if (!sanitized || isStreaming) return;
 
     const userMessage: Message = { role: 'user', content: sanitized };
-    setMessages(prev => [...prev, userMessage]);
+    
+    // Use functional update to avoid depending on 'messages' state
+    let currentMessages: Message[] = [];
+    setMessages(prev => {
+      currentMessages = [...prev, userMessage];
+      return currentMessages;
+    });
     
     setInput('');
     setIsStreaming(true);
@@ -58,7 +49,7 @@ export default function ChatBox({ initialMessage, lang = 'en' }: ChatBoxProps) {
 
     let currentResponse = '';
     streamChat(
-      [...messages, userMessage],
+      currentMessages,
       sessionId,
       lang,
       (chunk) => {
@@ -74,9 +65,30 @@ export default function ChatBox({ initialMessage, lang = 'en' }: ChatBoxProps) {
       (error) => {
         console.error("Chat Error:", error);
         setIsStreaming(false);
+        // Optional: show error message to user
+        setStreamingText(`Error: ${error}`);
       }
     );
-  };
+  }, [sessionId, lang, isStreaming, sanitizeInput]);
+
+  useEffect(() => {
+    if (!sessionId) {
+      setSessionId(`session_${Math.random().toString(36).slice(2, 9)}`);
+    }
+  }, [sessionId]);
+
+  useEffect(() => {
+    if (initialMessage && initialMessage !== lastInitialMessage.current) {
+      lastInitialMessage.current = initialMessage;
+      handleSend(initialMessage);
+    }
+  }, [initialMessage, handleSend]);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages, streamingText]);
 
   return (
     <div className="flex flex-col h-full bg-bg-surface relative overflow-hidden">

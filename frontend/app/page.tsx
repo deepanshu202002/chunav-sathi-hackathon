@@ -1,11 +1,10 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Info, ChevronUp, Globe } from 'lucide-react';
+import { Menu, Globe } from 'lucide-react';
 import ChatBox from '@/components/ChatBox';
-import { cn } from '@/lib/utils';
 import { Language, translations } from '@/lib/translations';
 
 const TopicCards = dynamic(() => import('@/components/TopicCards'), {
@@ -24,11 +23,6 @@ export default function Home() {
   
   const [selectedQuery, setSelectedQuery] = useState<string | undefined>(undefined);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
 
   const handleAction = useCallback((query: string) => {
     setSelectedQuery(query);
