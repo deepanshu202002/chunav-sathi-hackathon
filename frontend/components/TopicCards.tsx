@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion } from 'framer-motion';
 
 export interface Topic {
@@ -11,15 +12,18 @@ interface TopicCardsProps {
   onSelectTopic: (query: string) => void;
 }
 
-export default function TopicCards({ topics, onSelectTopic }: TopicCardsProps) {
+const TopicCards = React.memo(function TopicCards({ topics, onSelectTopic }: TopicCardsProps) {
   return (
-    <div className="grid grid-cols-2 gap-3 lg:gap-4 p-2 lg:p-4">
+    <section aria-label="Important election topics" className="grid grid-cols-2 gap-3 lg:gap-4 p-2 lg:p-4">
       {topics.map((topic, index) => (
         <motion.button
           key={topic.id}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: index * 0.07 }}
+          aria-label={`Learn about ${topic.title}`}
+          tabIndex={0}
+          onKeyDown={(e) => e.key === 'Enter' && onSelectTopic(topic.query)}
           whileHover={{ 
             y: -4, 
             scale: 1.02,
@@ -35,6 +39,8 @@ export default function TopicCards({ topics, onSelectTopic }: TopicCardsProps) {
           </span>
         </motion.button>
       ))}
-    </div>
+    </section>
   );
-}
+});
+
+export default TopicCards;

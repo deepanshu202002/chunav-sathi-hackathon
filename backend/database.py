@@ -18,7 +18,11 @@ def get_engine_url():
     print("⚠️  Warning: Cloud DATABASE_URL not found or invalid. Falling back to local SQLite.")
     return SQLITE_URL
 
-engine = create_async_engine(get_engine_url(), echo=True)
+engine = create_async_engine(
+    get_engine_url(), 
+    echo=True,
+    connect_args={"statement_cache_size": 0} if DATABASE_URL.startswith("postgresql") else {}
+)
 AsyncSessionLocal = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 Base = declarative_base()
 

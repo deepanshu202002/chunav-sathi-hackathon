@@ -20,6 +20,15 @@ export default function ChatBox({ initialMessage, lang = 'en' }: ChatBoxProps) {
   const [sessionId, setSessionId] = useState('');
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  const sanitizeInput = (text: string): string => {
+    return text
+      .trim()
+      .slice(0, 2000)
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+      .replace(/javascript:/gi, '')
+      .replace(/on\w+\s*=/gi, '')
+  }
+
   useEffect(() => {
     setSessionId(`session_${Math.random().toString(36).slice(2, 9)}`);
   }, []);
@@ -37,9 +46,10 @@ export default function ChatBox({ initialMessage, lang = 'en' }: ChatBoxProps) {
   }, [messages, streamingText]);
 
   const handleSend = async (content: string) => {
-    if (!content.trim() || isStreaming) return;
+    const sanitized = sanitizeInput(content);
+    if (!sanitized || isStreaming) return;
 
-    const userMessage: Message = { role: 'user', content };
+    const userMessage: Message = { role: 'user', content: sanitized };
     setMessages(prev => [...prev, userMessage]);
     
     setInput('');
@@ -91,6 +101,10 @@ export default function ChatBox({ initialMessage, lang = 'en' }: ChatBoxProps) {
       {/* Messages Area */}
       <div 
         ref={scrollRef}
+        role="log"
+        aria-live="polite"
+        aria-label="Conversation with Chunav Saathi"
+        aria-atomic="false"
         className="flex-1 overflow-y-auto p-4 lg:p-8 space-y-6 relative z-10 custom-scrollbar"
       >
         <AnimatePresence initial={false}>
@@ -121,7 +135,7 @@ export default function ChatBox({ initialMessage, lang = 'en' }: ChatBoxProps) {
             </motion.div>
           )}
 
-          {messages.map((msg, idx) => (
+          {messages.slice(-50).map((msg, idx) => (
             <motion.div
               key={idx}
               initial={{ opacity: 0, y: 10 }}
@@ -211,7 +225,10 @@ export default function ChatBox({ initialMessage, lang = 'en' }: ChatBoxProps) {
           </div>
         </div>
         <div className="max-w-4xl mx-auto relative flex items-end space-x-2">
+          <label htmlFor="chat-input" className="sr-only">Ask your election question</label>
           <textarea
+            id="chat-input"
+            aria-label="Type your election question"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {
@@ -227,6 +244,7 @@ export default function ChatBox({ initialMessage, lang = 'en' }: ChatBoxProps) {
           <button
             onClick={() => handleSend(input)}
             disabled={!input.trim() || isStreaming}
+            aria-label="Send message"
             className="p-3 bg-accent-saffron text-white rounded-2xl hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg"
           >
             <Send className="w-5 h-5" />

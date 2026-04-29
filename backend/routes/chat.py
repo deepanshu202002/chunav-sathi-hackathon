@@ -1,21 +1,45 @@
 from fastapi import APIRouter, Request, Depends
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from typing import List, Dict, Optional
 import json
 import asyncio
 from gemini import stream_chat
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import get_db
-from models import Chat, Message
+from models import Chat, Message as DbMessage
 from sqlalchemy import select
 
 router = APIRouter()
 
+class Message(BaseModel):
+    role: str
+    content: str
+
+    @validator('role')
+    def role_must_be_valid(cls, v):
+        if v not in ['user', 'assistant', 'model']:
+            raise ValueError('Invalid role')
+        return v
+
+    @validator('content')
+    def content_must_be_valid(cls, v):
+        if not v.strip():
+            raise ValueError('Content cannot be empty')
+        if len(v) > 2000:
+            raise ValueError('Content too long')
+        return v.strip()
+
 class ChatRequest(BaseModel):
-    messages: List[Dict[str, str]]
+    messages: List[Message]
     session_id: Optional[str] = None
     lang: str = "en"
+
+    @validator('messages')
+    def messages_not_empty(cls, v):
+        if not v:
+            raise ValueError('Messages cannot be empty')
+        return v[-100:] if len(v) > 100 else v
 
 @router.post("/chat")
 async def chat_endpoint(request: ChatRequest, db: AsyncSession = Depends(get_db)):
@@ -31,10 +55,10 @@ async def chat_endpoint(request: ChatRequest, db: AsyncSession = Depends(get_db)
     
     # 2. Save user message
     if request.session_id:
-        user_msg = Message(
+        user_msg = DbMessage(
             chat_id=request.session_id,
-            role=request.messages[-1]["role"],
-            content=request.messages[-1]["content"]
+            role=request.messages[-1].role,
+            content=request.messages[-1].content
         )
         db.add(user_msg)
         await db.commit()
@@ -42,7 +66,9 @@ async def chat_endpoint(request: ChatRequest, db: AsyncSession = Depends(get_db)
     async def event_generator():
         assistant_content = ""
         try:
-            async for chunk in stream_chat(request.messages, request.lang):
+            # Convert Pydantic models to dictionaries for stream_chat
+            messages_dict = [m.dict() for m in request.messages]
+            async for chunk in stream_chat(messages_dict, request.lang):
                 assistant_content += chunk
                 yield f"data: {json.dumps({'chunk': chunk})}\n\n"
             
@@ -51,7 +77,7 @@ async def chat_endpoint(request: ChatRequest, db: AsyncSession = Depends(get_db)
                 # We need a new session or careful handling since this is inside a generator
                 # For simplicity in this demo, we'll just save it at the end
                 # In production, use a background task or separate session
-                bot_msg = Message(
+                bot_msg = DbMessage(
                     chat_id=request.session_id,
                     role="assistant",
                     content=assistant_content

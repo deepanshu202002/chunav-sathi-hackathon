@@ -23,8 +23,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${outfit.variable} dark antialiased`}>
+    <html lang="en" dir="ltr" className={`${inter.variable} ${outfit.variable} dark antialiased`}>
+      <head>
+        <meta name="description" content="Chunav Saathi - Your guide to understanding Indian elections, voting process, and electoral system" />
+        <meta name="theme-color" content="#FF9933" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <link rel="preconnect" href="http://localhost:8000" />
+      </head>
       <body className="font-sans antialiased">
+        <a href="#main-chat" className="skip-link">
+          Skip to main content
+        </a>
         {children}
       </body>
     </html>
